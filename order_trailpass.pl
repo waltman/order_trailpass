@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use feature qw(:5.30);
 use experimental qw(signatures);
+use autodie;
 
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime(time);
@@ -16,10 +17,9 @@ my @month = qw(
 
 my $next_month = $month[($mon + 2) % 12];
 
-open SENDMAIL, "|/usr/sbin/sendmail -t"
-    or die "Can't fork for sendmail: $!\n";
+open my $SENDMAIL, "|/usr/sbin/sendmail -t";
 
-print SENDMAIL <<"EOF";
+print $SENDMAIL <<"EOF";
 From: order_trailpass.pl <waltman\@mawode.com>
 To: Walt Mankowski <waltman>
 Subject: Order new trailpass
@@ -32,5 +32,4 @@ order_trailpass.pl
 
 EOF
 
-close SENDMAIL
-    or die "sendmail didn't close nicely";
+close $SENDMAIL;

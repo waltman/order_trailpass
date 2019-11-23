@@ -13,10 +13,10 @@ my @month = qw(
 
 my $next_month = $month[($mon + 2) % 12];
 
-open QMAIL, "|/var/qmail/bin/qmail-inject"
-    or die "Can't fork for qmail: $!\n";
+open SENDMAIL, "|/usr/sbin/sendmail -t"
+    or die "Can't fork for sendmail: $!\n";
 
-print QMAIL <<"EOF";
+print SENDMAIL <<"EOF";
 From: order_trailpass.pl <waltman\@mawode.com>
 To: Walt Mankowski <waltman>
 Subject: Order new trailpass
@@ -29,5 +29,5 @@ order_trailpass.pl
 
 EOF
 
-close QMAIL
+close SENDMAIL
     or die "sendmail didn't close nicely";
